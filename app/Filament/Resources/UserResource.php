@@ -87,27 +87,14 @@ class UserResource extends Resource
                     ])->columns(3),
                 Section::make('Preferensi dan Riwayat')
                     ->schema([
-                        Forms\Components\CheckboxList::make('riwayat_penyakit')
-                            ->label('Riwayat Penyakit')
-                            ->searchable()
-                            ->bulkToggleable()
-                            ->columns(5)
-                            ->options([
-                                'diabetes' => 'Diabetes',
-                                'diabetes_melitus' => 'Diabetes Melitus',
-                                'jantung' => 'Penyakit Jantung',
-                                'stroke' => 'Stroke',
-                                'asam_lambung' => 'Asam Lambung',
-                                'asma' => 'Asma',
-                                'kanker' => 'Kanker',
-                                'liver' => 'Penyakit Liver',
-                                'gagal_ginjal' => 'Gagal Ginjal',
-                                'tuberkulosis' => 'Tuberkulosis',
-                                'gangguan_pernapasan' => 'Gangguan Pernapasan',
-                                'gangguan_pencernaan' => 'Gangguan Pencernaan',
-                                'hipertensi' => 'Hipertensi',
-                                'kolesterol' => 'Kolesterol Tinggi',
-                                'tidak_ada' => 'Tidak Ada Riwayat Penyakit',
+                        Section::make('Preferensi dan Riwayat')
+                            ->schema([
+                                Forms\Components\CheckboxList::make('riwayatPenyakits') // PENTING: Nama disesuaikan dengan nama relasi di model User
+                                    ->relationship('riwayatPenyakit', 'nama_penyakit') // Mengambil data dari relasi
+                                    ->label('Riwayat Penyakit')
+                                    ->searchable()
+                                    ->bulkToggleable()
+                                    ->columns(5),
                             ]),
                     ]),
                 Section::make('Hasil Model')

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +20,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'riwayat_penyakit_id',
         'nama_depan',
         'nama_belakang',
         'email',
@@ -27,8 +29,6 @@ class User extends Authenticatable
         'tanggal_lahir',
         'jenis_kelamin',
         'usia',
-        'pref_minuman',
-        'pref_makanan',
         'riwayat_penyakit',
         'hasil_model',
         'foto_profile',
@@ -76,5 +76,10 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return $this->nama_depan . ' ' . $this->nama_belakang ?: 'User';
+    }
+
+    public function riwayatPenyakit()
+    {
+        return $this->belongsTo(RiwayatPenyakit::class);
     }
 }

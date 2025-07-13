@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('riwayat_penyakit_id')->nullable();
             $table->string('nama_depan')->nullable();
             $table->string('nama_belakang')->nullable();
             $table->string('no_wa')->nullable();
