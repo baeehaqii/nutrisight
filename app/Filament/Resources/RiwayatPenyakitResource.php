@@ -33,7 +33,7 @@ class RiwayatPenyakitResource extends Resource
                 ->default('aktif')
                 ->options([
                     'aktif' => 'Aktif',
-                    'tidak_aktif' => 'Tidak Aktif',
+                    'tidak aktif' => 'Tidak Aktif',
                 ]),
             ]);
     }

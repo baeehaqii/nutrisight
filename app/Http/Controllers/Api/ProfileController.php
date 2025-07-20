@@ -30,10 +30,15 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'riwayat_penyakit_id' => 'nullable|integer|exists:riwayat_penyakits,id',
-            'jenis_kelamin' => ['nullable', 'string', Rule::in(['L', 'P'])],
+            // UBAH VALIDASI DI SINI
+            'riwayat_penyakit' => 'nullable|array', // Pastikan input adalah array
+            'riwayat_penyakit.*' => 'string|exists:riwayat_penyakits,nama_penyakit', // Validasi setiap nama penyakit di dalam array
+
+            'jenis_kelamin' => ['nullable', 'string', Rule::in(['L', 'P', 'laki-laki', 'perempuan'])],
             'tanggal_lahir' => 'nullable|date_format:Y-m-d',
             'no_wa' => 'nullable|string|max:20',
+            'target_konsumsi_gula' => ['nullable', 'string', Rule::in(['harian', 'mingguan', 'bulanan'])],
+            'target_konsumsi_gula_value' => 'nullable|numeric|required_with:target_konsumsi_gula',
         ]);
 
         if ($validator->fails()) {
@@ -43,8 +48,6 @@ class ProfileController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-
-        // Update data user
         $user->update($validator->validated());
 
         return response()->json([

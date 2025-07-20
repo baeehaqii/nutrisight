@@ -14,7 +14,7 @@ class RiwayatPenyakitController extends Controller
      */
     public function index()
     {
-        $data = RiwayatPenyakit::all();
+        $data = RiwayatPenyakit::where('status', 'aktif')->get();
         return response()->json([
             'success' => true,
             'data' => RiwayatPenyakitResource::collection($data)

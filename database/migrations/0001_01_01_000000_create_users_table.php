@@ -26,6 +26,8 @@ return new class extends Migration
             $table->json('hasil_model')->nullable();
             $table->string('foto_profile')->nullable();
             $table->string('email')->unique();
+            $table->string('target_konsumsi_gula')->nullable();
+            $table->integer('target_konsumsi_gula_value')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

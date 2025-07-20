@@ -87,16 +87,38 @@ class UserResource extends Resource
                     ])->columns(3),
                 Section::make('Preferensi dan Riwayat')
                     ->schema([
-                        Section::make('Preferensi dan Riwayat')
-                            ->schema([
-                                Forms\Components\CheckboxList::make('riwayatPenyakits') // PENTING: Nama disesuaikan dengan nama relasi di model User
-                                    ->relationship('riwayatPenyakit', 'nama_penyakit') // Mengambil data dari relasi
-                                    ->label('Riwayat Penyakit')
-                                    ->searchable()
-                                    ->bulkToggleable()
-                                    ->columns(5),
-                            ]),
+                        Forms\Components\CheckboxList::make('riwayat_penyakit')
+                            ->label('Riwayat Penyakit')
+                            ->options(function () {
+                                return \App\Models\RiwayatPenyakit::where('status', 'aktif')
+                                    ->pluck('nama_penyakit', 'nama_penyakit');
+                            })
+                            ->columns(3)
+                            ->searchable()
+                            ->bulkToggleable()
+                            ->columns(3),
+                        
                     ]),
+                    Section::make('Prefrensi Gula')
+                    ->schema([
+                        Forms\Components\Select::make('target_konsumsi_gula')
+                            ->label('Target Konsumsi Gula')
+                            ->options([
+                                'harian' => 'Harian',
+                                'mingguan' => 'Mingguan',
+                                'bulanan' => 'Bulanan',
+                            ])
+                            ->placeholder('Pilih Target Konsumsi Gula')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\TextInput::make('target_konsumsi_gula_value')
+                            ->label('Nilai Target Konsumsi Gula')
+                            ->numeric()
+                            ->suffix('/gram')
+                            ->required()
+                            ->maxLength(10)
+                            ->helperText('Masukkan nilai target konsumsi gula dalam gram.'),
+                    ])->columns(2),
                 Section::make('Hasil Model')
                     ->schema([
                         Forms\Components\Textarea::make('hasil_model')

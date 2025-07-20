@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -32,6 +33,8 @@ class User extends Authenticatable
         'riwayat_penyakit',
         'hasil_model',
         'foto_profile',
+        'target_konsumsi_gula',
+        'target_konsumsi_gula_value',
         'password',
     ];
 
@@ -55,7 +58,22 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'riwayat_penyakit' => 'array',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($user) {
+            $user->email_verified_at = now();
+        });
+
+        static::saving(function ($user) {
+            if ($user->isDirty('tanggal_lahir') && $user->tanggal_lahir) {
+                $user->usia = Carbon::parse($user->tanggal_lahir)->age;
+            }
+        });
     }
 
     /**
@@ -80,6 +98,6 @@ class User extends Authenticatable
 
     public function riwayatPenyakit()
     {
-        return $this->belongsTo(RiwayatPenyakit::class);
+        return $this->belongsToMany(RiwayatPenyakit::class);
     }
 }

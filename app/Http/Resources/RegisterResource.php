@@ -17,7 +17,17 @@ class RegisterResource extends JsonResource
         return [
             'id' => $this->id,
             'nama_depan' => $this->nama_depan,
+            'nama_belakang' => $this->nama_belakang,
+            'no_wa' => $this->no_wa,
+            'tanggal_lahir' => $this->tanggal_lahir,
+            'jenis_kelamin' => $this->jenis_kelamin,
+            'usia' => $this->usia,
             'email' => $this->email,
+            'email_verified_at' => $this->email_verified_at,
+            'foto_profile' => $this->foto_profile,
+            'riwayat_penyakit' => $this->riwayat_penyakit,
+            'target_konsumsi_gula' => $this->target_konsumsi_gula,
+            'target_konsumsi_gula_value' => $this->target_konsumsi_gula_value,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
