@@ -30,10 +30,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            // UBAH VALIDASI DI SINI
-            'riwayat_penyakit' => 'nullable|array', // Pastikan input adalah array
-            'riwayat_penyakit.*' => 'string|exists:riwayat_penyakits,nama_penyakit', // Validasi setiap nama penyakit di dalam array
-
+            'riwayat_penyakit' => 'nullable|array',
+            'riwayat_penyakit.*' => 'string|exists:riwayat_penyakits,nama_penyakit',
             'jenis_kelamin' => ['nullable', 'string', Rule::in(['L', 'P', 'laki-laki', 'perempuan'])],
             'tanggal_lahir' => 'nullable|date_format:Y-m-d',
             'no_wa' => 'nullable|string|max:20',
@@ -48,12 +46,29 @@ class ProfileController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        $user->update($validator->validated());
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Profile updated successfully',
-            'data' => new RegisterResource($user->fresh()) // Ambil data terbaru dari DB
-        ]);
+        try {
+            $validatedData = $validator->validated();
+
+            $user->update($validatedData);
+
+            if (isset($validatedData['riwayat_penyakit'])) {
+                $riwayatPenyakitIds = \App\Models\RiwayatPenyakit::whereIn('nama_penyakit', $validatedData['riwayat_penyakit'])->pluck('id')->toArray();
+                $user->riwayatPenyakits()->sync($riwayatPenyakitIds);
+                \Log::info('Riwayat Penyakit IDs:', $riwayatPenyakitIds);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Profile updated successfully',
+                'data' => new RegisterResource($user->fresh())
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the profile',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -72,13 +72,13 @@ class UserResource extends Resource
                             ->required()
                             ->revealable()
                             ->maxLength(255),
-                        Forms\Components\FileUpload::make('foto_profile')
-                            ->image()
-                            ->maxSize(1024)
-                            ->preserveFilenames()
-                            ->directory('profile_pictures')
-                            ->visibility('public')
-                            ->columnSpanFull(),
+                        // Forms\Components\FileUpload::make('foto_profile')
+                        //     ->image()
+                        //     ->maxSize(1024)
+                        //     ->preserveFilenames()
+                        //     ->directory('profile_pictures')
+                        //     ->visibility('public')
+                        //     ->columnSpanFull(),
                         Forms\Components\Select::make('roles')
                             ->multiple()
                             ->relationship('roles', 'name')
@@ -89,17 +89,13 @@ class UserResource extends Resource
                     ->schema([
                         Forms\Components\CheckboxList::make('riwayat_penyakit')
                             ->label('Riwayat Penyakit')
-                            ->options(function () {
-                                return \App\Models\RiwayatPenyakit::where('status', 'aktif')
-                                    ->pluck('nama_penyakit', 'nama_penyakit');
-                            })
+                            ->relationship('riwayatPenyakits', 'nama_penyakit')
                             ->columns(3)
                             ->searchable()
-                            ->bulkToggleable()
-                            ->columns(3),
-                        
+                            ->bulkToggleable(),
+
                     ]),
-                    Section::make('Prefrensi Gula')
+                Section::make('Prefrensi Gula')
                     ->schema([
                         Forms\Components\Select::make('target_konsumsi_gula')
                             ->label('Target Konsumsi Gula')
@@ -119,16 +115,6 @@ class UserResource extends Resource
                             ->maxLength(10)
                             ->helperText('Masukkan nilai target konsumsi gula dalam gram.'),
                     ])->columns(2),
-                Section::make('Hasil Model')
-                    ->schema([
-                        Forms\Components\Textarea::make('hasil_model')
-                            ->label('Hasil Model')
-                            ->json()
-                            ->maxLength(5000)
-                            ->helperText('Hasil model prediksi kesehatan pengguna.'),
-                    ]),
-
-
             ]);
     }
 

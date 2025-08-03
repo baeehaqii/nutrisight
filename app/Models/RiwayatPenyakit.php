@@ -13,6 +13,6 @@ class RiwayatPenyakit extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'riwayat_penyakit_user_pivot');
     }
 }

@@ -37,22 +37,35 @@ class ScanProdukResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('nama_produk')
                                 ->label('Nama Produk')
-                                ->placeholder('Otomatis Terisi Oleh AI..')
-                                ->readOnly(),
+                                ->required(),
                             Forms\Components\TextInput::make('jenis_produk')
                                 ->label('Jenis Produk')
-                                ->placeholder('Otomatis Terisi Oleh AI..')
-                                ->readOnly(),
-                            Forms\Components\TextInput::make('total_gula')
-                                ->label('Total Gula')
-                                ->suffix('gram')
-                                ->placeholder('Otomatis Terisi Oleh AI..')
-                                ->readOnly(),
-                            Forms\Components\Textarea::make('rekomendasi')
-                                ->placeholder('Rekomendasi dari AI')
-                                ->label('Rekomendasi AI')
-                                ->rows(8)
-                                ->columnSpanFull(),
+                                ->required(),
+                            Forms\Components\TextInput::make('takaran_saji')
+                                ->label('Takaran Saji')
+                                ->required(),
+                            Forms\Components\TextInput::make('grade_produk')
+                                ->label('Grade Produk')
+                                ->required(),
+                            Forms\Components\DatePicker::make('tanggal_scan')
+                                ->label('Tanggal Scan')
+                                ->required(),
+                            Forms\Components\TextInput::make('gula_per_saji')
+                                ->label('Gula per Saji')
+                                ->numeric()
+                                ->required(),
+                            Forms\Components\TextInput::make('gula_per_100ml')
+                                ->label('Gula per 100ml')
+                                ->numeric()
+                                ->required(),
+                            Forms\Components\FileUpload::make('gambar_produk')
+                                ->label('Gambar Produk')
+                                ->directory('scan-produk-upload')
+                                ->required(),
+                            Forms\Components\Textarea::make('rekomendasi_personalisasi')
+                                ->label('Rekomendasi Personalisasi')
+                                ->rows(5)
+                                ->required(),
                         ])->columnSpan([
                                 'lg' => 2,
                             ]),
@@ -180,22 +193,29 @@ class ScanProdukResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis_produk')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('total_gula')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('gambar_produk')
+                Tables\Columns\TextColumn::make('takaran_saji')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('grade_produk')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tanggal_scan')
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('gula_per_saji')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('gula_per_100ml')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('gambar_produk')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('rekomendasi_personalisasi')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
             ])
             ->filters([
                 //

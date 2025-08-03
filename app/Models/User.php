@@ -21,7 +21,6 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'riwayat_penyakit_id',
         'nama_depan',
         'nama_belakang',
         'email',
@@ -30,9 +29,6 @@ class User extends Authenticatable
         'tanggal_lahir',
         'jenis_kelamin',
         'usia',
-        'riwayat_penyakit',
-        'hasil_model',
-        'foto_profile',
         'target_konsumsi_gula',
         'target_konsumsi_gula_value',
         'password',
@@ -96,8 +92,13 @@ class User extends Authenticatable
         return $this->nama_depan . ' ' . $this->nama_belakang ?: 'User';
     }
 
-    public function riwayatPenyakit()
+    public function riwayatPenyakits()
     {
-        return $this->belongsToMany(RiwayatPenyakit::class);
+        return $this->belongsToMany(RiwayatPenyakit::class, 'riwayat_penyakit_user_pivot');
+    }
+
+    public function scanProduk()
+    {
+        return $this->hasMany(ScanProduk::class);
     }
 }

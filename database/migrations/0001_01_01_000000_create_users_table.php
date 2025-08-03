@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('riwayat_penyakit_id')->nullable();
             $table->string('nama_depan')->nullable();
             $table->string('nama_belakang')->nullable();
             $table->string('no_wa')->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->string('jenis_kelamin')->nullable();
             $table->integer('usia')->nullable();
-            $table->json('pref_minuman')->nullable();
-            $table->json('pref_makanan')->nullable();
-            $table->json('riwayat_penyakit')->nullable();
-            $table->json('hasil_model')->nullable();
-            $table->string('foto_profile')->nullable();
             $table->string('email')->unique();
             $table->string('target_konsumsi_gula')->nullable();
             $table->integer('target_konsumsi_gula_value')->nullable();

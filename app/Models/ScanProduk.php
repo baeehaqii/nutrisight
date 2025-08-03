@@ -7,10 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class ScanProduk extends Model
 {
     protected $fillable = [
+        'user_id',
         'nama_produk',
         'jenis_produk',
-        'total_gula',
+        'takaran_saji',
+        'grade_produk',
+        'tanggal_scan',
+        'gula_per_saji', //total gula dalam produk per takaran saji
+        'gula_per_100ml',
         'gambar_produk',
-        'rekomendasi'
+        'rekomendasi_personalisasi',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

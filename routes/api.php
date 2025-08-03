@@ -4,13 +4,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\RegisterController;
 use App\Http\Controllers\Api\GetProfileController;
+use App\Http\Controllers\Api\ScanProdukController;
+use App\Http\Controllers\Api\ResetPasswordController;
 use App\Http\Controllers\Api\RiwayatPenyakitController;
-use App\Http\Controllers\Api\ProfileController; // Tambahkan ini
+use App\Http\Controllers\Api\ProfileController;
 
 // Public routes
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/login', [LoginController::class, 'store']);
+Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 Route::get('/riwayat-penyakit', [RiwayatPenyakitController::class, 'index']);
+Route::post('/historyscan', [ScanProdukController::class, 'store']);
+Route::get('/historyscan', [ScanProdukController::class, 'index']);
+Route::get('/historyscan/{id}', [ScanProdukController::class, 'show']);
 
 // Protected routes (jika menggunakan Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
