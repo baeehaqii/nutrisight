@@ -1,19 +1,34 @@
-# Stage 1: Build dependencies with Composer
-FROM composer:2.8 as vendor
+# Stage 1: Build dependencies using a Debian-based PHP image
+FROM php:8.3-cli as vendor
 
-# Install intl extension dependencies for Filament
-RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
+# Install system dependencies needed for Composer and extensions (using apt-get)
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libicu-dev \
+    libzip-dev \
+    zip
 
+# Install PHP extensions required by dependencies, including intl for Filament
+RUN docker-php-ext-install intl zip pdo pdo_mysql
+
+# Install Composer by copying the binary from the official image
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set up application directory
 WORKDIR /app
 COPY database/ database/
 COPY composer.json composer.json
 COPY composer.lock composer.lock
+
+# Run composer install
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-# Stage 2: Build the final production image
+
+# Stage 2: Build the final production image (This stage does not change)
 FROM php:8.3-apache
 
-# Install required system packages and PHP extensions (ditambahkan libicu-dev dan intl)
+# Install required system packages and PHP extensions
 RUN apt-get update && apt-get install -y \
       libpng-dev \
       libjpeg-dev \
