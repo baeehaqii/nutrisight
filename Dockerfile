@@ -1,5 +1,8 @@
 # Stage 1: Build dependencies with Composer
-FROM composer:2.8 as vendor
+FROM composer:2 as vendor
+
+# Install intl extension dependencies for Filament
+RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
 
 WORKDIR /app
 COPY database/ database/
@@ -8,9 +11,9 @@ COPY composer.lock composer.lock
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Stage 2: Build the final production image
-FROM php:8.4-apache
+FROM php:8.3-apache
 
-# Install required system packages and PHP extensions
+# Install required system packages and PHP extensions (ditambahkan libicu-dev dan intl)
 RUN apt-get update && apt-get install -y \
       libpng-dev \
       libjpeg-dev \
@@ -18,8 +21,9 @@ RUN apt-get update && apt-get install -y \
       libzip-dev \
       zip \
       unzip \
+      libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+    && docker-php-ext-install gd pdo pdo_mysql zip intl
 
 # Enable Apache mod_rewrite for Laravel's routing
 RUN a2enmod rewrite
