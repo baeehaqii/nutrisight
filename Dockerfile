@@ -1,27 +1,28 @@
 # Stage 1: Build dependencies using a Debian-based PHP image
 FROM php:8.3-cli as vendor
 
-# Install system dependencies needed for Composer and extensions (using apt-get)
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libicu-dev \
-    libzip-dev \
-    zip
+# Install system dependencies needed for Composer and extensions
+RUN apt-get update && apt-get install -y git unzip libicu-dev libzip-dev zip
 
-# Install PHP extensions required by dependencies, including intl for Filament
+# Install PHP extensions required by dependencies
 RUN docker-php-ext-install intl zip pdo pdo_mysql
 
-# Install Composer by copying the binary from the official image
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set up application directory
 WORKDIR /app
-COPY database/ database/
-COPY composer.json composer.json
-COPY composer.lock composer.lock
 
-# Run composer install
+# Copy application files
+COPY . .
+
+# Create a dummy .env file for the build process by copying the example
+RUN cp .env.example .env
+
+# Generate an application key for the build
+RUN php artisan key:generate
+
+# Run composer install (now with a working .env and app key)
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 
