@@ -25,7 +25,7 @@ class RiwayatPenyakitResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama_penyakit')
                     ->required()
-                    ->label('Nama Penyakitt')
+                    ->label('Nama Penyakit')
                     ->placeholder('Masukkan nama penyakit')
                     ->maxLength(255),
                 Forms\Components\Select::make('status')
