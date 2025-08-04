@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies with Composer
-FROM composer:2.9 as vendor
+FROM composer:2.8 as vendor
 
 WORKDIR /app
 COPY database/ database/
