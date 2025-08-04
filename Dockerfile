@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies with Composer
-FROM composer:2 as vendor
+FROM composer:2.8 as vendor
 
 # Install intl extension dependencies for Filament
 RUN apt-get update && apt-get install -y libicu-dev && docker-php-ext-install intl
