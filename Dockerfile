@@ -1,10 +1,10 @@
 # Stage 1: Build dependencies using a Debian-based PHP image
 FROM php:8.3-cli as vendor
 
-# Install system dependencies needed for Composer and extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y git unzip libicu-dev libzip-dev zip
 
-# Install PHP extensions required by dependencies
+# Install PHP extensions
 RUN docker-php-ext-install intl zip pdo pdo_mysql
 
 # Install Composer
@@ -13,17 +13,25 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set up application directory
 WORKDIR /app
 
-# Copy application files
+# Copy only composer files to leverage Docker cache
+COPY database/ database/
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+
+# 1. Install dependencies WITHOUT running scripts to avoid .env issues
+RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist
+
+# 2. Now copy the rest of the application code
 COPY . .
 
-# Create a dummy .env file for the build process by copying the example
+# 3. Create the .env file
 RUN cp .env.example .env
 
-# Generate an application key for the build
+# 4. Generate the key (now artisan can run because vendor/ exists)
 RUN php artisan key:generate
 
-# Run composer install (now with a working .env and app key)
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+# 5. Generate the optimized autoloader and other scripts manually
+RUN composer dump-autoload --optimize
 
 
 # Stage 2: Build the final production image (This stage does not change)
