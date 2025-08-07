@@ -11,50 +11,43 @@ class ScanProdukController extends Controller
 {
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
+        $validated = $request->validate([
             'nama_produk' => 'required|string|max:255',
-            'jenis_produk' => 'nullable|string|max:255',
-            'takaran_saji' => 'nullable|string|max:255',
-            'grade_produk' => 'nullable|string|max:255',
-            'tanggal_scan' => 'nullable|date_format:Y-m-d',
+            'jenis_produk' => 'nullable|string',
+            'takaran_saji' => 'nullable|string',
+            'grade_produk' => 'nullable|string',
+            'tanggal_scan' => 'nullable|date',
             'gula_per_saji' => 'nullable|integer',
             'gula_per_100ml' => 'nullable|integer',
-            'gambar_produk' => 'nullable|string|max:255',
+            'gambar_produk' => 'nullable|string',
             'rekomendasi_personalisasi' => 'nullable|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        $scanProduk = ScanProduk::create($validator->validated());
+        $validated['user_id'] = auth()->id();
+        $scanProduk = ScanProduk::create($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Scan produk berhasil disimpan',
             'data' => $scanProduk,
         ], 201);
     }
 
     public function index(Request $request)
     {
-        $results = ScanProduk::with('user')->get();
+        $results = ScanProduk::where('user_id', auth()->id())->with('user')->get();
 
         return response()->json([
             'success' => true,
-            'message' => 'Data hasil scan produk berhasil diambil',
             'data' => $results,
-        ], 200);
+        ]);
     }
 
     public function show($id)
     {
-        $scanProduk = ScanProduk::with('user')->find($id);
+        $scanProduk = ScanProduk::where('user_id', auth()->id())
+            ->where('id', $id)
+            ->with('user')
+            ->first();
 
         if (!$scanProduk) {
             return response()->json([
@@ -65,8 +58,7 @@ class ScanProdukController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Detail riwayat scan berhasil diambil',
             'data' => $scanProduk,
-        ], 200);
+        ]);
     }
 }

@@ -14,12 +14,13 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/login', [LoginController::class, 'store']);
 Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 Route::get('/riwayat-penyakit', [RiwayatPenyakitController::class, 'index']);
-Route::post('/historyscan', [ScanProdukController::class, 'store']);
-Route::get('/historyscan', [ScanProdukController::class, 'index']);
-Route::get('/historyscan/{id}', [ScanProdukController::class, 'show']);
 
 // Protected routes (jika menggunakan Sanctum)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/profile', GetProfileController::class); 
-    Route::post('/profile/update', [ProfileController::class, 'update']); // Endpoint untuk update
+    Route::get('/historyscan', [ScanProdukController::class, 'index']);
+    Route::get('/historyscan/{id}', [ScanProdukController::class, 'show']);
+    Route::post('/historyscan', [ScanProdukController::class, 'store']);
+    Route::get('/profile', GetProfileController::class);
+    Route::post('/profile/update', [ProfileController::class, 'update']);
+    \Log::info('Authenticated User ID:', ['user_id' => auth()->id()]);
 });
