@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ScanProduk extends Model
 {
@@ -21,5 +23,13 @@ class ScanProduk extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function gambarProduk(): Attribute
+    {
+        return Attribute::make(
+            // Fungsi 'get' ini akan dipanggil saat Anda mengambil data
+            get: fn ($value) => $value ? Storage::url($value) : null,
+        );
     }
 }

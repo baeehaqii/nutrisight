@@ -189,7 +189,7 @@ class ScanProdukResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_produkk')
+                Tables\Columns\TextColumn::make('nama_produk')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis_produk')
                     ->searchable(),

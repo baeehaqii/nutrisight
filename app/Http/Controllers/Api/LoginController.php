@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\LoginResource;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\LoginResource;
 
 class LoginController extends Controller
 {
@@ -22,13 +23,21 @@ class LoginController extends Controller
         ]);
 
         // Cari user berdasarkan email
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', Str::lower($request->email))->first();
 
-        // Cek user dan password
-        if (!$user || !Hash::check($request->password, (string) $user->password)) {
+        // Cek user
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Email atau password salah'
+                'message' => 'Akun tidak ditemukan'
+            ], 404);
+        }
+
+        // Cek password
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password salah'
             ], 401);
         }
 
