@@ -29,12 +29,13 @@ class RiwayatPenyakitResource extends Resource
                     ->placeholder('Masukkan nama penyakit')
                     ->maxLength(255),
                 Forms\Components\Select::make('status')
-                ->label('Status')
-                ->default('aktif')
-                ->options([
-                    'aktif' => 'Aktif',
-                    'tidak aktif' => 'Tidak Aktif',
-                ]),
+                    ->label('Status')
+                    ->required()
+                    ->default('aktif')
+                    ->options([
+                        'aktif' => 'Aktif',
+                        'tidak aktif' => 'Tidak Aktif',
+                    ]),
             ]);
     }
 

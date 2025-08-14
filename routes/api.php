@@ -25,4 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/historyscan', [ScanProdukController::class, 'store']);
     Route::get('/profile', GetProfileController::class);
     Route::post('/profile/update', [ProfileController::class, 'update']);
+    Route::get('/ocr-context', [ProfileController::class, 'getOcrContext']);
 });

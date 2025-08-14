@@ -189,6 +189,10 @@ class ScanProdukResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('user.nama_depan')
+                    ->label('Pengguna')
+                    ->formatStateUsing(fn($record) => $record->user->nama_depan . ' ' . $record->user->nama_belakang)
+                    ->searchable(['nama_depan', 'nama_belakang']),
                 Tables\Columns\TextColumn::make('nama_produk')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jenis_produk')

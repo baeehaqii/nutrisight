@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\RegisterResource;
+use Carbon\Carbon;
+use App\Models\ScanProduk;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\RegisterResource;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -70,5 +72,23 @@ class ProfileController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+    public function getOcrContext(Request $request)
+    {
+        $user = $request->user();
+        
+        // 1. Hitung konsumsi gula hari ini langsung dari database
+        $dailySugarConsumption = ScanProduk::where('user_id', $user->id)
+            ->whereDate('tanggal_scan', Carbon::today())
+            ->sum('gula_per_saji');
+
+        // 2. Kembalikan data profil dan data terhitung dalam satu paket
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'profile' => new RegisterResource($user),
+                'daily_sugar_consumption' => $dailySugarConsumption
+            ]
+        ]);
     }
 }

@@ -25,7 +25,7 @@ class RegisterResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
             'foto_profile' => $this->foto_profile,
-            'riwayat_penyakit' => $this->riwayat_penyakit,
+            'riwayat_penyakit' => $this->riwayatPenyakits,
             'target_konsumsi_gula' => $this->target_konsumsi_gula,
             'target_konsumsi_gula_value' => $this->target_konsumsi_gula_value,
             'created_at' => $this->created_at,

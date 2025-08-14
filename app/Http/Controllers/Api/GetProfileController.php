@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class GetProfileController extends Controller
 {
-
     public function __invoke(Request $request)
     {
-        $user = $request->user();
+        $user = $request->user()->load('riwayatPenyakits');
 
         return response()->json([
             'success' => true,
