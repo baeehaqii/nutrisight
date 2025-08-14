@@ -43,6 +43,7 @@ class LoginController extends Controller
 
         // Generate token
         $token = $user->createToken('auth_token')->plainTextToken;
+        $user->load('riwayatPenyakits');
 
         return response()->json([
             'success' => true,

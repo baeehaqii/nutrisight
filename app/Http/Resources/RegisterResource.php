@@ -28,6 +28,8 @@ class RegisterResource extends JsonResource
             'riwayat_penyakit' => $this->riwayatPenyakits,
             'target_konsumsi_gula' => $this->target_konsumsi_gula,
             'target_konsumsi_gula_value' => $this->target_konsumsi_gula_value,
+            'konsumsi_gula_harian' => $this->konsumsi_gula_harian,
+            'tanggal_konsumsi_terakhir' => $this->tanggal_konsumsi_terakhir,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

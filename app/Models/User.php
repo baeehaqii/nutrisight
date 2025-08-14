@@ -33,6 +33,8 @@ class User extends Authenticatable implements FilamentUser
         'usia',
         'target_konsumsi_gula',
         'target_konsumsi_gula_value',
+        'konsumsi_gula_harian',
+        'tanggal_konsumsi_terakhir',
         'password',
     ];
 
@@ -56,7 +58,6 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'riwayat_penyakit' => 'array',
         ];
     }
 
